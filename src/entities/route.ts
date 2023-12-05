@@ -1,6 +1,6 @@
 import invariant from 'tiny-invariant'
 
-import { Currency, Price, Token } from '@uniswap/sdk-core'
+import { ChainId, Currency, Price, Token } from '@vnaysn/jediswap-sdk-core'
 import { Pool } from './pool'
 
 /**
@@ -51,7 +51,7 @@ export class Route<TInput extends Currency, TOutput extends Currency> {
     this.output = output ?? tokenPath[tokenPath.length - 1]
   }
 
-  public get chainId(): number {
+  public get chainId(): ChainId {
     return this.pools[0].chainId
   }
 

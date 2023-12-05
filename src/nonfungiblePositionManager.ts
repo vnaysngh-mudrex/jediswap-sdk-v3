@@ -1,12 +1,4 @@
-import {
-  BigintIsh,
-  Percent,
-  Token,
-  CurrencyAmount,
-  validateAndParseAddress,
-  Currency,
-  NativeCurrency
-} from '@uniswap/sdk-core'
+import { BigintIsh, Percent, CurrencyAmount, validateAndParseAddress, Currency } from '@vnaysn/jediswap-sdk-core'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import { Position } from './entities/position'
@@ -15,10 +7,8 @@ import { MethodParameters, toHex } from './utils/calldata'
 import { Interface } from '@ethersproject/abi'
 import INonfungiblePositionManager from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
 import { PermitOptions, SelfPermit } from './selfPermit'
-import { ADDRESS_ZERO } from './constants'
 import { Pool } from './entities'
 import { Multicall } from './multicall'
-import { Payments } from './payments'
 
 const MaxUint128 = toHex(JSBI.subtract(JSBI.exponentiate(JSBI.BigInt(2), JSBI.BigInt(128)), JSBI.BigInt(1)))
 
@@ -54,11 +44,6 @@ export interface CommonAddLiquidityOptions {
    * When the transaction expires, in epoch seconds.
    */
   deadline: BigintIsh
-
-  /**
-   * Whether to spend ether. If true, one of the pool tokens must be WETH, by default false
-   */
-  useNative?: NativeCurrency
 
   /**
    * The optional permit parameters for spending token0
@@ -263,19 +248,19 @@ export abstract class NonfungiblePositionManager {
 
     let value: string = toHex(0)
 
-    if (options.useNative) {
-      const wrapped = options.useNative.wrapped
-      invariant(position.pool.token0.equals(wrapped) || position.pool.token1.equals(wrapped), 'NO_WETH')
+    // if (options.useNative) {
+    //   const wrapped = options.useNative.wrapped
+    //   invariant(position.pool.token0.equals(wrapped) || position.pool.token1.equals(wrapped), 'NO_WETH')
 
-      const wrappedValue = position.pool.token0.equals(wrapped) ? amount0Desired : amount1Desired
+    //   const wrappedValue = position.pool.token0.equals(wrapped) ? amount0Desired : amount1Desired
 
-      // we only need to refund if we're actually sending ETH
-      if (JSBI.greaterThan(wrappedValue, ZERO)) {
-        calldatas.push(Payments.encodeRefundETH())
-      }
+    //   // we only need to refund if we're actually sending ETH
+    //   if (JSBI.greaterThan(wrappedValue, ZERO)) {
+    //     calldatas.push(Payments.encodeRefundETH())
+    //   }
 
-      value = toHex(wrappedValue)
-    }
+    //   value = toHex(wrappedValue)
+    // }
 
     return {
       calldata: Multicall.encodeMulticall(calldatas),
@@ -288,9 +273,6 @@ export abstract class NonfungiblePositionManager {
 
     const tokenId = toHex(options.tokenId)
 
-    const involvesETH =
-      options.expectedCurrencyOwed0.currency.isNative || options.expectedCurrencyOwed1.currency.isNative
-
     const recipient = validateAndParseAddress(options.recipient)
 
     // collect
@@ -298,27 +280,12 @@ export abstract class NonfungiblePositionManager {
       NonfungiblePositionManager.INTERFACE.encodeFunctionData('collect', [
         {
           tokenId,
-          recipient: involvesETH ? ADDRESS_ZERO : recipient,
+          recipient,
           amount0Max: MaxUint128,
           amount1Max: MaxUint128
         }
       ])
     )
-
-    if (involvesETH) {
-      const ethAmount = options.expectedCurrencyOwed0.currency.isNative
-        ? options.expectedCurrencyOwed0.quotient
-        : options.expectedCurrencyOwed1.quotient
-      const token = options.expectedCurrencyOwed0.currency.isNative
-        ? (options.expectedCurrencyOwed1.currency as Token)
-        : (options.expectedCurrencyOwed0.currency as Token)
-      const tokenAmount = options.expectedCurrencyOwed0.currency.isNative
-        ? options.expectedCurrencyOwed1.quotient
-        : options.expectedCurrencyOwed0.quotient
-
-      calldatas.push(Payments.encodeUnwrapWETH9(ethAmount, recipient))
-      calldatas.push(Payments.encodeSweepToken(token, tokenAmount, recipient))
-    }
 
     return calldatas
   }

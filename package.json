@@ -1,5 +1,5 @@
 {
-  "name": "@uniswap/v3-sdk",
+  "name": "@vnaysn/jediswap-sdk-v3",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -11,9 +11,9 @@
   "files": [
     "dist"
   ],
-  "repository": "https://github.com/Uniswap/uniswap-v3-sdk.git",
+  "repository": "https://github.com/vnaysngh-mudrex/jediswap-sdk-v3",
   "keywords": [
-    "uniswap",
+    "jediswap",
     "ethereum"
   ],
   "module": "dist/v3-sdk.esm.js",
@@ -30,6 +30,7 @@
     "@uniswap/swap-router-contracts": "^1.2.1",
     "@uniswap/v3-periphery": "^1.1.1",
     "@uniswap/v3-staker": "1.0.0",
+    "@vnaysn/jediswap-sdk-core": "^5.0.0",
     "tiny-invariant": "^1.1.0",
     "tiny-warning": "^1.0.3"
   },

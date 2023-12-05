@@ -1,4 +1,4 @@
-import { BigintIsh, CurrencyAmount, Price, Token } from '@uniswap/sdk-core'
+import { BigintIsh, ChainId, CurrencyAmount, Price, Token } from '@vnaysn/jediswap-sdk-core'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import { FACTORY_ADDRESS, FeeAmount, TICK_SPACINGS } from '../constants'
@@ -146,7 +146,7 @@ export class Pool {
   /**
    * Returns the chain ID of the tokens in the pool.
    */
-  public get chainId(): number {
+  public get chainId(): ChainId {
     return this.token0.chainId
   }
 
@@ -186,7 +186,7 @@ export class Pool {
     outputAmount: CurrencyAmount<Token>,
     sqrtPriceLimitX96?: JSBI
   ): Promise<[CurrencyAmount<Token>, Pool]> {
-    invariant(outputAmount.currency.isToken && this.involvesToken(outputAmount.currency), 'TOKEN')
+    invariant(outputAmount.currency && this.involvesToken(outputAmount.currency), 'TOKEN')
 
     const zeroForOne = outputAmount.currency.equals(this.token1)
 

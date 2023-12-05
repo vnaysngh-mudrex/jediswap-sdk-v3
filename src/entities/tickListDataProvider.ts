@@ -1,4 +1,4 @@
-import { BigintIsh } from '@uniswap/sdk-core'
+import { BigintIsh } from '@vnaysn/jediswap-sdk-core'
 import { TickList } from '../utils/tickList'
 import { Tick, TickConstructorArgs } from './tick'
 import { TickDataProvider } from './tickDataProvider'
