@@ -1,15 +1,25 @@
 import { BigintIsh, ChainId, CurrencyAmount, Price, Token } from '@vnaysn/jediswap-sdk-core'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
-import { FACTORY_ADDRESS, FeeAmount, TICK_SPACINGS } from '../constants'
+import {
+  DEFAULT_CHAIN_ID,
+  FACTORY_ADDRESS,
+  FEE_TO_SETTER_ADDRESS,
+  FeeAmount,
+  PAIR_CLASS_HASH,
+  PAIR_PROXY_CLASS_HASH,
+  TICK_SPACINGS
+} from '../constants'
 import { NEGATIVE_ONE, ONE, Q192, ZERO } from '../internalConstants'
-import { computePoolAddress } from '../utils/computePoolAddress'
 import { LiquidityMath } from '../utils/liquidityMath'
 import { SwapMath } from '../utils/swapMath'
 import { TickMath } from '../utils/tickMath'
 import { Tick, TickConstructorArgs } from './tick'
 import { NoTickDataProvider, TickDataProvider } from './tickDataProvider'
 import { TickListDataProvider } from './tickListDataProvider'
+import { ec, hash } from 'starknet'
+
+let PAIR_ADDRESS_CACHE: { [token0Address: string]: { [token1Address: string]: string } } = {}
 
 interface StepComputations {
   sqrtPriceStartX96: JSBI
@@ -41,20 +51,36 @@ export class Pool {
   private _token0Price?: Price<Token, Token>
   private _token1Price?: Price<Token, Token>
 
-  public static getAddress(
-    tokenA: Token,
-    tokenB: Token,
-    fee: FeeAmount,
-    initCodeHashManualOverride?: string,
-    factoryAddressOverride?: string
-  ): string {
-    return computePoolAddress({
-      factoryAddress: factoryAddressOverride ?? FACTORY_ADDRESS,
-      fee,
-      tokenA,
-      tokenB,
-      initCodeHashManualOverride
-    })
+  public static getAddress(tokenA: Token, tokenB: Token): string {
+    const tokens = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA] // does safety checks
+
+    const { calculateContractAddressFromHash } = hash
+
+    const salt = ec.starkCurve.pedersen(tokens[0].address, tokens[1].address)
+
+    const contructorCalldata = [
+      PAIR_CLASS_HASH[tokens[0].chainId ?? DEFAULT_CHAIN_ID],
+      tokens[0].address,
+      tokens[1].address,
+      FEE_TO_SETTER_ADDRESS[tokens[0].chainId ?? DEFAULT_CHAIN_ID]
+    ]
+
+    if (PAIR_ADDRESS_CACHE?.[tokens[0].address]?.[tokens[1].address] === undefined) {
+      PAIR_ADDRESS_CACHE = {
+        ...PAIR_ADDRESS_CACHE,
+        [tokens[0].address]: {
+          ...PAIR_ADDRESS_CACHE?.[tokens[0].address],
+          [tokens[1].address]: calculateContractAddressFromHash(
+            salt,
+            PAIR_PROXY_CLASS_HASH[tokens[0].chainId ?? DEFAULT_CHAIN_ID],
+            contructorCalldata,
+            FACTORY_ADDRESS[tokens[0].chainId ?? DEFAULT_CHAIN_ID]
+          )
+        }
+      }
+    }
+
+    return PAIR_ADDRESS_CACHE[tokens[0].address][tokens[1].address]
   }
 
   /**
