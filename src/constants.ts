@@ -48,7 +48,7 @@ export const FACTORY_ADDRESS: { [chainId in ChainId]: string } = {
 
 export const PAIR_CLASS_HASH: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x2b39bc3f4c1fd5bef8b7d21504c44e0da59cf27b350551b13d913da52e40d3b',
-  [ChainId.GOERLI]: '0x2b39bc3f4c1fd5bef8b7d21504c44e0da59cf27b350551b13d913da52e40d3b'
+  [ChainId.GOERLI]: '0x03753c99d7bf185ee0cb4f8747fe95ffad300d0f7ba269369e657764a99d5e46'
 }
 
 export const PAIR_PROXY_CLASS_HASH: { [chainId in ChainId]: string } = {
