@@ -1,14 +1,7 @@
 import { BigintIsh, ChainId, CurrencyAmount, Price, Token } from '@vnaysn/jediswap-sdk-core'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
-import {
-  DEFAULT_CHAIN_ID,
-  FACTORY_ADDRESS,
-  FEE_TO_SETTER_ADDRESS,
-  FeeAmount,
-  PAIR_CLASS_HASH,
-  TICK_SPACINGS
-} from '../constants'
+import { DEFAULT_CHAIN_ID, FACTORY_ADDRESS, FeeAmount, PAIR_CLASS_HASH, TICK_SPACINGS } from '../constants'
 import { NEGATIVE_ONE, ONE, Q192, ZERO } from '../internalConstants'
 import { LiquidityMath } from '../utils/liquidityMath'
 import { SwapMath } from '../utils/swapMath'
