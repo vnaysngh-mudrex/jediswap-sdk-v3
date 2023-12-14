@@ -58,12 +58,7 @@ export class Pool {
     const salt = ec.starkCurve.poseidonHashMany([BigInt(tokens[0].address), BigInt(tokens[1].address), BigInt(fee)])
     // console.log('🚀 ~ file: pool.ts:60 ~ Pool ~ getAddress ~ salt:', salt)
 
-    const contructorCalldata = [
-      PAIR_CLASS_HASH[tokens[0].chainId ?? DEFAULT_CHAIN_ID],
-      tokens[0].address,
-      tokens[1].address,
-      FEE_TO_SETTER_ADDRESS[tokens[0].chainId ?? DEFAULT_CHAIN_ID]
-    ]
+    const contructorCalldata = [tokens[0].address, tokens[1].address, fee, TICK_SPACINGS[fee]]
 
     if (PAIR_ADDRESS_CACHE?.[tokens[0].address]?.[tokens[1].address] === undefined) {
       PAIR_ADDRESS_CACHE = {
