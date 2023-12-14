@@ -7,7 +7,6 @@ import {
   FEE_TO_SETTER_ADDRESS,
   FeeAmount,
   PAIR_CLASS_HASH,
-  PAIR_PROXY_CLASS_HASH,
   TICK_SPACINGS
 } from '../constants'
 import { NEGATIVE_ONE, ONE, Q192, ZERO } from '../internalConstants'
@@ -51,12 +50,13 @@ export class Pool {
   private _token0Price?: Price<Token, Token>
   private _token1Price?: Price<Token, Token>
 
-  public static getAddress(tokenA: Token, tokenB: Token): string {
+  public static getAddress(tokenA: Token, tokenB: Token, fee: FeeAmount): string {
     const tokens = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA] // does safety checks
 
     const { calculateContractAddressFromHash } = hash
 
-    const salt = ec.starkCurve.pedersen(tokens[0].address, tokens[1].address)
+    const salt = ec.starkCurve.poseidonHashMany([BigInt(tokens[0].address), BigInt(tokens[1].address), BigInt(fee)])
+    // console.log('🚀 ~ file: pool.ts:60 ~ Pool ~ getAddress ~ salt:', salt)
 
     const contructorCalldata = [
       PAIR_CLASS_HASH[tokens[0].chainId ?? DEFAULT_CHAIN_ID],
@@ -72,7 +72,7 @@ export class Pool {
           ...PAIR_ADDRESS_CACHE?.[tokens[0].address],
           [tokens[1].address]: calculateContractAddressFromHash(
             salt,
-            PAIR_PROXY_CLASS_HASH[tokens[0].chainId ?? DEFAULT_CHAIN_ID],
+            PAIR_CLASS_HASH[tokens[0].chainId ?? DEFAULT_CHAIN_ID],
             contructorCalldata,
             FACTORY_ADDRESS[tokens[0].chainId ?? DEFAULT_CHAIN_ID]
           )
