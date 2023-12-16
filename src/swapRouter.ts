@@ -1,12 +1,5 @@
 import { Interface } from '@ethersproject/abi'
-import {
-  BigintIsh,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  TradeType,
-  validateAndParseAddress
-} from '@vnaysn/jediswap-sdk-core'
+import { BigintIsh, Currency, CurrencyAmount, Percent, TradeType } from '@vnaysn/jediswap-sdk-core'
 import invariant from 'tiny-invariant'
 import { Trade } from './entities/trade'
 import { ADDRESS_ZERO } from './constants'
@@ -16,6 +9,7 @@ import { MethodParameters, toHex } from './utils/calldata'
 import ISwapRouter from '@uniswap/v3-periphery/artifacts/contracts/SwapRouter.sol/SwapRouter.json'
 import { Multicall } from './multicall'
 import { FeeOptions, Payments } from './payments'
+import { validateAndParseAddress } from 'starknet'
 
 /**
  * Options for producing the arguments to send calls to the router.

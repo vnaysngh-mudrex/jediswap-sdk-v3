@@ -1,9 +1,10 @@
-import { BigintIsh, Token, validateAndParseAddress } from '@vnaysn/jediswap-sdk-core'
+import { BigintIsh, Token } from '@vnaysn/jediswap-sdk-core'
 import { MethodParameters, toHex } from './utils/calldata'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
 import IUniswapV3Staker from '@uniswap/v3-staker/artifacts/contracts/UniswapV3Staker.sol/UniswapV3Staker.json'
 import { Pool } from './entities'
 import { Multicall } from './multicall'
+import { validateAndParseAddress } from 'starknet'
 
 export type FullWithdrawOptions = ClaimOptions & WithdrawOptions
 /**

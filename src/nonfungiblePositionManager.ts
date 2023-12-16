@@ -1,4 +1,4 @@
-import { BigintIsh, Percent, CurrencyAmount, validateAndParseAddress, Currency } from '@vnaysn/jediswap-sdk-core'
+import { BigintIsh, Percent, CurrencyAmount, Currency } from '@vnaysn/jediswap-sdk-core'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import { Position } from './entities/position'
@@ -9,6 +9,7 @@ import INonfungiblePositionManager from '@uniswap/v3-periphery/artifacts/contrac
 import { PermitOptions, SelfPermit } from './selfPermit'
 import { Pool } from './entities'
 import { Multicall } from './multicall'
+import { validateAndParseAddress } from 'starknet'
 
 const MaxUint128 = toHex(JSBI.subtract(JSBI.exponentiate(JSBI.BigInt(2), JSBI.BigInt(128)), JSBI.BigInt(1)))
 
