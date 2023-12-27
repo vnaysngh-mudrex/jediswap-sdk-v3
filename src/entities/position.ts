@@ -1,6 +1,6 @@
 import { BigintIsh, MaxUint256, Percent, Price, CurrencyAmount, Token } from '@vnaysn/jediswap-sdk-core'
 import JSBI from 'jsbi'
-// import invariant from 'tiny-invariant'
+import invariant from 'tiny-invariant'
 import { ZERO } from '../internalConstants'
 import { maxLiquidityForAmounts } from '../utils/maxLiquidityForAmounts'
 import { tickToPrice } from '../utils/priceTickConversions'
@@ -38,9 +38,9 @@ export class Position {
    * @param tickUpper The upper tick of the position
    */
   public constructor({ pool, liquidity, tickLower, tickUpper }: PositionConstructorArgs) {
-    // invariant(tickLower < tickUpper, 'TICK_ORDER')
-    // invariant(tickLower >= TickMath.MIN_TICK && tickLower % pool.tickSpacing === 0, 'TICK_LOWER')
-    // invariant(tickUpper <= TickMath.MAX_TICK && tickUpper % pool.tickSpacing === 0, 'TICK_UPPER')
+    invariant(tickLower < tickUpper, 'TICK_ORDER')
+    invariant(tickLower >= TickMath.MIN_TICK && tickLower % pool.tickSpacing === 0, 'TICK_LOWER')
+    invariant(tickUpper <= TickMath.MAX_TICK && tickUpper % pool.tickSpacing === 0, 'TICK_UPPER')
 
     this.pool = pool
     this.tickLower = tickLower
