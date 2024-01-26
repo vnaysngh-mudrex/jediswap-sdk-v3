@@ -1,4 +1,4 @@
-import invariant from 'tiny-invariant'
+// import invariant from 'tiny-invariant'
 
 import { ChainId, Currency, Price, Token } from '@vnaysn/jediswap-sdk-core'
 import { Pool } from './pool'
@@ -23,10 +23,10 @@ export class Route<TInput extends Currency, TOutput extends Currency> {
    * @param output The output token
    */
   public constructor(pools: Pool[], input: TInput, output: TOutput) {
-    invariant(pools.length > 0, 'POOLS')
+    // invariant(pools.length > 0, 'POOLS')
 
-    const chainId = pools[0].chainId
-    const allOnSameChain = pools.every(pool => pool.chainId === chainId)
+    // const chainId = pools[0].chainId
+    // const allOnSameChain = pools.every(pool => pool.chainId === chainId)
     // invariant(allOnSameChain, 'CHAIN_IDS')
 
     const wrappedInput = input.wrapped
