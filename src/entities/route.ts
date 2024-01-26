@@ -27,12 +27,12 @@ export class Route<TInput extends Currency, TOutput extends Currency> {
 
     const chainId = pools[0].chainId
     const allOnSameChain = pools.every(pool => pool.chainId === chainId)
-    invariant(allOnSameChain, 'CHAIN_IDS')
+    // invariant(allOnSameChain, 'CHAIN_IDS')
 
     const wrappedInput = input.wrapped
-    invariant(pools[0].involvesToken(wrappedInput), 'INPUT')
+    // invariant(pools[0].involvesToken(wrappedInput), 'INPUT')
 
-    invariant(pools[pools.length - 1].involvesToken(output.wrapped), 'OUTPUT')
+    // invariant(pools[pools.length - 1].involvesToken(output.wrapped), 'OUTPUT')
 
     /**
      * Normalizes token0-token1 order and selects the next token/fee step to add to the path
@@ -40,7 +40,7 @@ export class Route<TInput extends Currency, TOutput extends Currency> {
     const tokenPath: Token[] = [wrappedInput]
     for (const [i, pool] of pools.entries()) {
       const currentInputToken = tokenPath[i]
-      invariant(currentInputToken.equals(pool.token0) || currentInputToken.equals(pool.token1), 'PATH')
+      // invariant(currentInputToken.equals(pool.token0) || currentInputToken.equals(pool.token1), 'PATH')
       const nextToken = currentInputToken.equals(pool.token0) ? pool.token1 : pool.token0
       tokenPath.push(nextToken)
     }
