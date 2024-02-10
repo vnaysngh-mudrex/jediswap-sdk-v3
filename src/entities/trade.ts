@@ -414,17 +414,6 @@ export class Trade<TInput extends Currency, TOutput extends Currency, TTradeType
     }[]
     tradeType: TTradeType
   }) {
-    const inputCurrency = routes[0].inputAmount.currency
-    const outputCurrency = routes[0].outputAmount.currency
-    invariant(
-      routes.every(({ route }) => inputCurrency.wrapped.equals(route.input.wrapped)),
-      'INPUT_CURRENCY_MATCH'
-    )
-    invariant(
-      routes.every(({ route }) => outputCurrency.wrapped.equals(route.output.wrapped)),
-      'OUTPUT_CURRENCY_MATCH'
-    )
-
     const numPools = routes.map(({ route }) => route.pools.length).reduce((total, cur) => total + cur, 0)
     const poolAddressSet = new Set<string>()
     for (const { route } of routes) {
