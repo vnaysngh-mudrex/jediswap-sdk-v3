@@ -1656,10 +1656,10 @@
     "@uniswap/v3-core" "1.0.0"
     "@uniswap/v3-periphery" "^1.0.1"
 
-"@vnaysn/jediswap-sdk-core@^10.3.0":
-  version "10.3.0"
-  resolved "https://registry.yarnpkg.com/@vnaysn/jediswap-sdk-core/-/jediswap-sdk-core-10.3.0.tgz#1ca87857578af52dec4a93f1445ffc3a4c7d143c"
-  integrity sha512-BN88MCz/C+eInKLpTqdFvQiIkAoKCdyrsuN8Or7M9Be5jhuqfUyaa+QPZl+buNDe+Lbjfq4DJ0wCCW4bj1vMLw==
+"@vnaysn/jediswap-sdk-core@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@vnaysn/jediswap-sdk-core/-/jediswap-sdk-core-11.0.0.tgz#ad488872fefc5bba221271627c1af7fba5db64a9"
+  integrity sha512-0t8BCXrc5D/YbIvvTIlXBK/pEEO7E8o8isyAqXyv4kZdOBdY8t8b5UroJG8lcbkc9JseUoaPI9uDkuKRu2FN3g==
   dependencies:
     "@ethersproject/address" "^5.0.2"
     big.js "^5.2.2"
